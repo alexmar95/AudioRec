@@ -1,4 +1,4 @@
-package com.commonsware.android.audiorec;
+package com.example.audiorec;
 
 import android.media.MediaRecorder;
 import android.media.MediaRecorder.OnErrorListener;
@@ -13,9 +13,10 @@ import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 import java.io.File;
+import java.io.IOException;
+
 import static android.Manifest.permission.RECORD_AUDIO;
 import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
-
 public class MainActivity extends AbstractPermissionActivity implements
         OnCheckedChangeListener, OnErrorListener, OnInfoListener {
     private static final String BASENAME="recording.3gp";
@@ -30,7 +31,7 @@ public class MainActivity extends AbstractPermissionActivity implements
     @Override
     protected void onPermissionDenied() {
         Toast
-                .makeText(this, R.string.msg_sorry, Toast.LENGTH_LONG)
+                .makeText(this, "Some permission was revoked", Toast.LENGTH_LONG)
                 .show();
         finish();
     }
@@ -65,7 +66,7 @@ public class MainActivity extends AbstractPermissionActivity implements
         if (isChecked) {
             output=
                     new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS),
-                            BASENAME);
+                            String.format("recording_%d.3gp", System.currentTimeMillis()));
 
             recorder.setAudioSource(MediaRecorder.AudioSource.MIC);
             recorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
